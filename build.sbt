@@ -5,7 +5,19 @@ ThisBuild / name := "Oselka"
 ThisBuild / version := "0.1.0-SNAPSHOT"
 ThisBuild / organization := "org.psyd"
 
+lazy val game = (project in file("game"))
+
 lazy val infrastructure = (project in file("infrastructure"))
+  .dependsOn(game)
+  .settings(
+    libraryDependencies ++= Seq(
+      "org.typelevel" %% "cats-effect" % "3.7.0",
+      "org.typelevel" %% "doobie-core" % "1.0.0-RC13",
+      "org.typelevel" %% "doobie-postgres" % "1.0.0-RC13",
+      "org.typelevel" %% "doobie-specs2" % "1.0.0-RC13",
+      "org.typelevel" %% "doobie-hikari" % "1.0.0-RC13"
+    )
+  )
 
 lazy val auth = (project in file("auth"))
   .dependsOn(infrastructure)
@@ -14,7 +26,7 @@ lazy val auth = (project in file("auth"))
   )
 
 lazy val app = (project in file("app"))
-  .dependsOn(infrastructure, auth)
+  .dependsOn(game, infrastructure, auth)
   .settings(
     libraryDependencies ++= Seq(
       "com.softwaremill.sttp.tapir" %% "tapir-core" % "1.13.25",
