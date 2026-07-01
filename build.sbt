@@ -5,13 +5,16 @@ ThisBuild / name := "Oselka"
 ThisBuild / version := "0.1.0-SNAPSHOT"
 ThisBuild / organization := "org.psyd"
 
+lazy val infrastructure = (project in file("infrastructure"))
+
 lazy val auth = (project in file("auth"))
+  .dependsOn(infrastructure)
   .settings(
     libraryDependencies += "org.typelevel" %% "cats-effect" % "3.7.0"
   )
 
 lazy val app = (project in file("app"))
-  .dependsOn(auth)
+  .dependsOn(infrastructure, auth)
   .settings(
     libraryDependencies ++= Seq(
       "com.softwaremill.sttp.tapir" %% "tapir-core" % "1.13.25",
