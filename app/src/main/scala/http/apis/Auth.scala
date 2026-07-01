@@ -28,7 +28,7 @@ final class Auth[F[_]: Functor](
       and setCookie("refresh_token")
     )
     .errorOut(statusCode(StatusCode.BadRequest))
-    .serverLogicSuccess(creds => {
+    /*.serverLogic(creds => {
       authService.signIn(creds)
         .map(tokens => (
             CookieValueWithMeta(
@@ -46,7 +46,7 @@ final class Auth[F[_]: Functor](
                 path = Some("/auth/refresh")
               )
           ))
-    })
+    })*/
 
   def postSignUp = endpoint
     .post
