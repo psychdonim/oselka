@@ -12,6 +12,7 @@ import io.circe.generic.auto._
 import cats.Functor
 import cats.syntax.functor._
 import sttp.model.headers.CookieValueWithMeta
+import org.psyd.oselka.auth.tokens.TokensPair
 
 final class Auth[F[_]: Functor](
   private val authService: AuthService[F]
