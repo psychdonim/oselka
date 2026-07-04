@@ -7,8 +7,16 @@ ThisBuild / organization := "org.psyd"
 
 lazy val game = (project in file("game"))
 
+lazy val auth = (project in file("auth"))
+  .settings(
+    libraryDependencies ++= Seq(
+      "com.github.f4b6a3" % "uuid-creator" % "6.1.1",
+      "org.typelevel" %% "cats-effect" % "3.7.0"
+    )
+  )
+
 lazy val infrastructure = (project in file("infrastructure"))
-  .dependsOn(game)
+  .dependsOn(game, auth)
   .settings(
     libraryDependencies ++= Seq(
       "org.typelevel" %% "cats-effect" % "3.7.0",
@@ -17,12 +25,6 @@ lazy val infrastructure = (project in file("infrastructure"))
       "org.typelevel" %% "doobie-specs2" % "1.0.0-RC13",
       "org.typelevel" %% "doobie-hikari" % "1.0.0-RC13"
     )
-  )
-
-lazy val auth = (project in file("auth"))
-  .dependsOn(infrastructure)
-  .settings(
-    libraryDependencies += "org.typelevel" %% "cats-effect" % "3.7.0"
   )
 
 lazy val app = (project in file("app"))
