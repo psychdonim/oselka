@@ -11,7 +11,8 @@ lazy val auth = (project in file("auth"))
   .settings(
     libraryDependencies ++= Seq(
       "com.github.f4b6a3" % "uuid-creator" % "6.1.1",
-      "org.typelevel" %% "cats-effect" % "3.7.0"
+      "org.typelevel" %% "cats-effect" % "3.7.0",
+      "com.auth0" % "java-jwt" % "4.4.0"
     )
   )
 

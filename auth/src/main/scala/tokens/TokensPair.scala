@@ -1,4 +1,4 @@
 package org.psyd.oselka
-package auth
+package auth.tokens
 
 final case class TokensPair(access: String, refresh: String)
