@@ -24,7 +24,8 @@ lazy val infrastructure = (project in file("infrastructure"))
       "org.typelevel" %% "doobie-core" % "1.0.0-RC13",
       "org.typelevel" %% "doobie-postgres" % "1.0.0-RC13",
       "org.typelevel" %% "doobie-specs2" % "1.0.0-RC13",
-      "org.typelevel" %% "doobie-hikari" % "1.0.0-RC13"
+      "org.typelevel" %% "doobie-hikari" % "1.0.0-RC13",
+      "de.mkammerer" % "argon2-jvm" % "2.12"
     )
   )
 
