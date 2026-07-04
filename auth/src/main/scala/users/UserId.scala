@@ -7,6 +7,8 @@ import com.github.f4b6a3.uuid.UuidCreator
 opaque type UserId = UUID
 
 object UserId {
+  def apply(id: UUID): UserId = id
+
   def random: UserId =
     UuidCreator.getTimeOrderedEpoch()
 
