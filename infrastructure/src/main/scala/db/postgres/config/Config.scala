@@ -1,6 +1,8 @@
 package org.psyd.oselka
 package infrastructure.db.postgres.config
 
+import cats.effect.Sync
+
 final case class Config(
     host: String,
     port: Int,
@@ -10,7 +12,15 @@ final case class Config(
   )
 
 object Config {
-  def load: Either[ConfigError, Config] = for {
+  def loadF[F[_]: Sync]: F[Config] = {
+    val config = load
+    config match {
+      case Left(err) => Sync[F] raiseError { new RuntimeException(s"DB config error: $err") }
+      case Right(value) => Sync[F] pure value
+    }
+  }
+
+  private def load: Either[ConfigError, Config] = for {
     host <- fromEnv("PSYD_OSELKA_POSTGRES_HOST")
     portStr <- fromEnv("PSYD_OSELKA_POSTGRES_PORT")
     port <- portStr.toIntOption.toRight(InvalidPort(portStr))
