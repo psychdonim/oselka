@@ -11,8 +11,7 @@ lazy val auth = (project in file("auth"))
   .settings(
     libraryDependencies ++= Seq(
       "com.github.f4b6a3" % "uuid-creator" % "6.1.1",
-      "org.typelevel" %% "cats-effect" % "3.7.0",
-      "com.auth0" % "java-jwt" % "4.4.0"
+      "org.typelevel" %% "cats-effect" % "3.7.0"
     )
   )
 
@@ -25,7 +24,8 @@ lazy val infrastructure = (project in file("infrastructure"))
       "org.typelevel" %% "doobie-postgres" % "1.0.0-RC13",
       "org.typelevel" %% "doobie-specs2" % "1.0.0-RC13",
       "org.typelevel" %% "doobie-hikari" % "1.0.0-RC13",
-      "de.mkammerer" % "argon2-jvm" % "2.12"
+      "de.mkammerer" % "argon2-jvm" % "2.12",
+      "com.auth0" % "java-jwt" % "4.5.2"
     )
   )
 

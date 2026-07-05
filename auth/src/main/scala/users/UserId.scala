@@ -8,6 +8,7 @@ opaque type UserId = UUID
 
 object UserId {
   def apply(id: UUID): UserId = id
+  def apply(str: String): UserId = UUID.fromString(str)
 
   def random: UserId =
     UuidCreator.getTimeOrderedEpoch()

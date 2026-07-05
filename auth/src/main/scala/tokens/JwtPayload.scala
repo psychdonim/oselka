@@ -1,4 +1,6 @@
 package org.psyd.oselka
 package auth.tokens
 
-final case class JwtPayload()
+import org.psyd.oselka.auth.users.UserId
+
+final case class JwtPayload(userId: UserId, tokenType: TokenType)
