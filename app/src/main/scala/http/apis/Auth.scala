@@ -8,50 +8,41 @@ import sttp.tapir.json.circe.jsonBody
 import sttp.model.StatusCode
 import sttp.tapir.generic.auto._
 import io.circe.generic.auto._
-
 import cats.Functor
 import cats.syntax.functor._
 import sttp.model.headers.CookieValueWithMeta
 import org.psyd.oselka.auth.tokens.TokensPair
+import sttp.model.headers.Cookie
+import sttp.tapir.EndpointOutput.OneOf
+import sttp.tapir.EndpointOutput.OneOfVariant
+import org.psyd.oselka.auth.errors.SignUpError
 
 final class Auth[F[_]: Functor](
   private val authService: AuthService[F]
 ) {
   private val authRoot = "auth"
 
-  def postSignIn = endpoint
+  def postSignUp = endpoint
     .post
-    .securityIn(authRoot / "signin")
+    .securityIn(authRoot / "signup")
     .in(jsonBody[Creds])
     .out(
-      statusCode(StatusCode.Ok)
+      statusCode(StatusCode.Created)
       and setCookie("access_token")
       and setCookie("refresh_token")
     )
-    .errorOut(statusCode(StatusCode.BadRequest))
-    /*.serverLogic(creds => {
-      authService.signIn(creds)
-        .map(tokens => (
-            CookieValueWithMeta(
-                "access_token",
-                tokens.access,
-                httpOnly = true,
-                secure = true,
-                path = Some("/")
-              ),
-            CookieValueWithMeta(
-                "refresh_token",
-                tokens.refresh,
-                httpOnly = true,
-                secure = true,
-                path = Some("/auth/refresh")
-              )
-          ))
-    })*/
+    .errorOut(statusCode)
+    .serverLogic(creds => {
+      authService
+        .signUp(creds)
+        .map { tokens => (Cookies.accessCookie(tokens.access), Cookies.refreshCookie(tokens.refresh)) }
+        .leftMap { case SignUpError.UserAlreadyExists => StatusCode.Conflict }
+        .value
+    })
 
-  def postSignUp = endpoint
+  def postSignIn = endpoint
     .post
-    .in(authRoot / "signup")
+    .in(authRoot / "signin")
     .in(jsonBody[Creds])
     .out(statusCode(StatusCode.Created) and jsonBody[TokensPair])
 
@@ -60,7 +51,6 @@ final class Auth[F[_]: Functor](
     .in(authRoot / "refresh")
 
   val endpoints = List(
-      postSignIn,
       postSignUp
     )
 }
