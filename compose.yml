@@ -1,0 +1,36 @@
+name: oselka
+
+networks:
+  postgres:
+    name: ${PSYD_OSELKA_POSTGRES_HOST}
+
+services:
+  app:
+    build:
+      context: .
+    depends_on:
+      - postgres
+    environment:
+      PSYD_OSELKA_POSTGRES_HOST: ${PSYD_OSELKA_POSTGRES_HOST}
+      PSYD_OSELKA_POSTGRES_PORT: ${PSYD_OSELKA_POSTGRES_PORT}
+      PSYD_OSELKA_POSTGRES_USER: ${PSYD_OSELKA_POSTGRES_USER}
+      PSYD_OSELKA_POSTGRES_PASSWORD: ${PSYD_OSELKA_POSTGRES_PASSWORD}
+      PSYD_OSELKA_POSTGRES_DB: ${PSYD_OSELKA_POSTGRES_DB}
+    networks:
+      - postgres
+    ports:
+      - 8080:8080
+    restart: always
+
+  postgres:
+    image: postgres:18.4-alpine3.24
+    networks:
+        - postgres
+    ports:
+      - ${PSYD_OSELKA_POSTGRES_PORT}:5432
+    restart: always
+
+    environment:
+      POSTGRES_USER: ${PSYD_OSELKA_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${PSYD_OSELKA_POSTGRES_PASSWORD}
+      POSTGRES_DB: ${PSYD_OSELKA_POSTGRES_DB}

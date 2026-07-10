@@ -1,9 +1,20 @@
+import sbtassembly.MergeStrategy
+
 val scala3Version = "3.8.4"
 
 ThisBuild / scalaVersion := "3.8.4"
 ThisBuild / name := "Oselka"
 ThisBuild / version := "0.1.0-SNAPSHOT"
 ThisBuild / organization := "org.psyd"
+ThisBuild / assembly / assemblyMergeStrategy := merge
+
+val merge: String => MergeStrategy = x => {
+  val PathList(path @ _*) = x
+  path match {
+    case init :+ "module-info.class" => MergeStrategy.discard
+    case _ => MergeStrategy.defaultMergeStrategy(x)
+  }
+}
 
 lazy val game = (project in file("game"))
 
@@ -42,7 +53,8 @@ lazy val app = (project in file("app"))
       "io.circe" %% "circe-core" % "0.14.15",
       "io.circe" %% "circe-generic" % "0.14.15",
       "io.circe" %% "circe-parser" % "0.14.15"
-    )
+    ),
+    assembly / mainClass := Some("org.psyd.oselka.app.Application")
   )
 
 lazy val root = (project in file("."))
