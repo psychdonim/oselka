@@ -3,7 +3,7 @@ package infrastructure.db.postgres.config
 
 import cats.effect.Sync
 
-final case class Config(
+final case class PostgresConfig(
     host: String,
     port: Int,
     database: String,
@@ -11,8 +11,8 @@ final case class Config(
     password: String
   )
 
-object Config {
-  def loadF[F[_]: Sync]: F[Config] = {
+object PostgresConfig {
+  def loadF[F[_]: Sync]: F[PostgresConfig] = {
     val config = load
     config match {
       case Left(err) => Sync[F] raiseError { new RuntimeException(s"DB config error: $err") }

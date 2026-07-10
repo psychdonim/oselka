@@ -7,7 +7,7 @@ import org.psyd.oselka.app.http.apis.Auth
 import org.psyd.oselka.auth.AuthService
 import org.psyd.oselka.infrastructure.db.postgres.repositories.users.DoobieUsersRepository
 import org.psyd.oselka.infrastructure.db.postgres.Database
-import org.psyd.oselka.infrastructure.db.postgres.config.Config
+import org.psyd.oselka.infrastructure.db.postgres.config.PostgresConfig
 import org.psyd.oselka.app.http.HttpServer
 import org.psyd.oselka.app.http.ServerConfig
 import cats.effect.Resource
@@ -17,10 +17,13 @@ import org.http4s.server.Server
 
 object Application extends IOApp.Simple {
   override def run: IO[Unit] = {
-    IO.pure(())
+    for {
+      cfg <- PostgresConfig.loadF[IO]
+      _ <- resource(cfg).useForever
+    } yield ()
   }
 
-  private def resource(dbConfig: Config): Resource[IO, Server] = {
+  private def resource(dbConfig: PostgresConfig): Resource[IO, Server] = {
     for {
       xa <- Database.transactor[IO](dbConfig)
       
