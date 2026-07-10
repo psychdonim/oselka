@@ -35,6 +35,9 @@ lazy val app = (project in file("app"))
     libraryDependencies ++= Seq(
       "com.softwaremill.sttp.tapir" %% "tapir-core" % "1.13.25",
       "com.softwaremill.sttp.tapir" %% "tapir-json-circe" % "1.13.25",
+      "com.softwaremill.sttp.tapir" %% "tapir-http4s-server" % "1.13.25",
+      "org.http4s" %% "http4s-ember-server" % "0.23.34",
+      "org.http4s" %% "http4s-dsl" % "0.23.34",
       "org.typelevel" %% "cats-effect" % "3.7.0",
       "io.circe" %% "circe-core" % "0.14.15",
       "io.circe" %% "circe-generic" % "0.14.15",
